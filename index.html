@@ -3,165 +3,779 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>云寄售平台</title>
+    <title>多功能查询系统</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        body { background: #f5f7fa; color: #333; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        header { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 15px 0; }
-        .navbar { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 24px; font-weight: bold; color: #3498db; text-decoration: none; }
-        .nav-links { display: flex; list-style: none; gap: 20px; }
-        .nav-links a { text-decoration: none; color: #333; font-weight: 500; }
-        .auth-buttons { display: flex; gap: 10px; }
-        .btn { padding: 8px 20px; border: none; border-radius: 4px; cursor: pointer; }
-        .btn-primary { background: #3498db; color: white; }
-        .btn-outline { background: transparent; border: 1px solid #3498db; color: #3498db; }
-        .hero { background: linear-gradient(135deg, #3498db, #8e44ad); color: white; padding: 80px 0; text-align: center; }
-        .hero h1 { font-size: 48px; margin-bottom: 20px; }
-        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin: 50px 0; }
-        .feature-card { background: white; padding: 30px; border-radius: 8px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .form-container { max-width: 500px; margin: 50px auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .form-group { margin-bottom: 20px; }
-        .form-control { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; }
-        .hidden { display: none; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        
+        body {
+            背景: 线性梯度(135deg，#1a1a2e0%，#16213e100%);
+            颜色: #333;
+            线高: 1.6;
+            最小高度: 100VH;
+            显示: 弯曲;
+            对齐项目: 中心;
+            justify-content: 中心;
+            填充: 20PX;
+            位置: 相对的;
+            溢出: 隐藏的;
+        }
+        
+        /* 数字雨背景 */
+        #matrixCanvas {
+            位置: 确定的;
+            顶端: 0;
+            左: 0;
+            宽度: 100%;
+            高度: 100%;
+            Z指数: -1;
+        }
+        
+        /* 入口页面样式 */
+        .entry-page {
+            宽度: 100%;
+            height: 100vh;
+            background-color: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            transition: opacity 0.5s ease;
+            padding-left: 50px;
+            gap: 30px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .oval-button {
+            width: 180px;
+            height: 50px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .qq-button {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+        }
+        
+        .express-button {
+            background: linear-gradient(135deg, #2196F3, #0D47A1);
+        }
+        
+        .oval-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* 主查询系统样式 */
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            display: none;
+            backdrop-filter: blur(5px);
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+        
+        .qq-container::before {
+            background: linear-gradient(90deg, #4CAF50, #2E7D32);
+        }
+        
+        .express-container::before {
+            background: linear-gradient(90deg, #2196F3, #0D47A1);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h1 {
+            font-size: 26px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .description {
+            color: #666;
+            font-size: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 18px;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .qq-input:focus {
+            border-color: #4CAF50;
+        }
+        
+        .express-input:focus {
+            border-color: #2196F3;
+        }
+        
+        button {
+            width: 100%;
+            padding: 14px;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .qq-button-main {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+        }
+        
+        .express-button-main {
+            background: linear-gradient(135deg, #2196F3, #0D47A1);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            transition: all 0.3s;
+        }
+        
+        .back-button:hover {
+            background: #e0e0e0;
+        }
+        
+        /* 查询结果样式 */
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa, #e4e8f1);
+            border-radius: 10px;
+            display: none;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .result h3 {
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 18px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ccc;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .result-label {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .result-value {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .protected {
+            color: #ff6b6b;
+            font-style: italic;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        .qq-spinner {
+            border-left-color: #4CAF50;
+        }
+        
+        .express-spinner {
+            border-left-color: #2196F3;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .api-status {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .api-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin: 0 3px;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .qq-dot {
+            background-color: #4CAF50;
+        }
+        
+        .express-dot {
+            background-color: #2196F3;
+        }
+        
+        .api-dot:nth-child(2) { animation-delay: 0.2s; }
+        .api-dot:nth-child(3) { animation-delay: 0.4s; }
+        .api-dot:nth-child(4) { animation-delay: 0.6s; }
+        .api-dot:nth-child(5) { animation-delay: 0.8s; }
+        .api-dot:nth-child(6) { animation-delay: 1.0s; }
+        .api-dot:nth-child(7) { animation-delay: 1.2s; }
+        .api-dot:nth-child(8) { animation-delay: 1.4s; }
+        .api-dot:nth-child(9) { animation-delay: 1.6s; }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <nav class="navbar">
-                <a href="#" class="logo">云寄售</a>
-                <ul class="nav-links">
-                    <li><a href="#" onclick="showPage('home')">首页</a></li>
-                    <li><a href="#" onclick="showPage('products')">商品浏览</a></li>
-                    <li><a href="#" onclick="showPage('sell')">我要寄售</a></li>
-                </ul>
-                <div class="auth-buttons">
-                    <button class="btn btn-outline" onclick="showPage('login')">登录</button>
-                    <button class="btn btn-primary" onclick="showPage('register')">注册</button>
-                </div>
-            </nav>
+    <!-- 数字雨背景 -->
+    <canvas id="matrixCanvas"></canvas>
+    
+    <!-- 入口页面 -->
+    <div class="entry-page" id="entryPage">
+        <div class="oval-button qq-button" id="qqButton">
+            QQ号查询信息
         </div>
-    </header>
-
-    <section id="home" class="page">
-        <div class="hero">
-            <div class="container">
-                <h1>轻松寄售，安心交易</h1>
-                <p>专业的云寄售平台，让闲置物品创造价值</p>
-                <button class="btn btn-primary" style="margin-top: 20px; padding: 12px 30px;" onclick="showPage('register')">开始使用</button>
+        <div class="oval-button express-button" id="expressButton">
+            查询快递订单号信息
+        </div>
+    </div>
+    
+    <!-- QQ查询系统 -->
+    <div class="container qq-container" id="qqContainer">
+        <button class="back-button" id="backFromQQ">返回</button>
+        <header>
+            <h1>QQ号查询手机号系统</h1>
+            <p class="description">请输入要查询的QQ号码，系统将自动尝试多个接口获取数据</p>
+        </header>
+        
+        <div class="input-group">
+            <input type="text" id="qqNumber" class="qq-input" placeholder="输入QQ号码">
+            <button id="queryQQBtn" class="qq-button-main">查信息</button>
+        </div>
+        
+        <div class="loading" id="qqLoading">
+            <div class="spinner qq-spinner"></div>
+            <p>正在查询中，请稍候...</p>
+            <div class="api-status">
+                <div class="api-dot qq-dot"></div>
+                <div class="api-dot qq-dot"></div>
+                <div class="api-dot qq-dot"></div>
+                <div class="api-dot qq-dot"></div>
+                <div class="api-dot qq-dot"></div>
+                <div class="api-dot qq-dot"></div>
+                <div class="api-dot qq-dot"></div>
+                <div class="api-dot qq-dot"></div>
+                <div class="api-dot qq-dot"></div>
             </div>
         </div>
-        <div class="container">
-            <div class="features">
-                <div class="feature-card">
-                    <h3>简单易用</h3>
-                    <p>三步完成商品寄售，操作简单快捷</p>
-                </div>
-                <div class="feature-card">
-                    <h3>安全可靠</h3>
-                    <p>多重保障机制，交易安全无忧</p>
-                </div>
-                <div class="feature-card">
-                    <h3>高效便捷</h3>
-                    <p>智能匹配买家，快速达成交易</p>
-                </div>
+        
+        <div class="result" id="qqResult">
+            <h3>查询结果</h3>
+            <div class="result-item">
+                <span class="result-label">QQ号码：</span>
+                <span class="result-value" id="resultQQ"></span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">绑定手机：</span>
+                <span class="result-value" id="resultPhone"></span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">身份证号：</span>
+                <span class="result-value" id="resultID"></span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">性别：</span>
+                <span class="result-value" id="resultGender"></span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">归属地：</span>
+                <span class="result-value" id="resultLocation"></span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">查询接口：</span>
+                <span class="result-value" id="resultAPI"></span>
             </div>
         </div>
-    </section>
-
-    <section id="register" class="page hidden">
-        <div class="container">
-            <div class="form-container">
-                <h2>注册账号</h2>
-                <form onsubmit="registerUser(event)">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="用户名" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" class="form-control" placeholder="电子邮箱" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="password" class="form-control" placeholder="密码" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">注册</button>
-                    <p style="text-align: center; margin-top: 20px;">
-                        <a href="#" onclick="showPage('login')">已有账号？立即登录</a>
-                    </p>
-                </form>
+    </div>
+    
+    <!-- 快递查询系统 -->
+    <div class="container express-container" id="expressContainer">
+        <button class="back-button" id="backFromExpress">返回</button>
+        <header>
+            <h1>快递单号查询系统</h1>
+            <p class="description">请输入要查询的快递单号，系统将自动尝试多个接口获取物流信息</p>
+        </header>
+        
+        <div class="input-group">
+            <input type="text" id="expressNumber" class="express-input" placeholder="输入快递单号">
+            <button id="queryExpressBtn" class="express-button-main">查信息</button>
+        </div>
+        
+        <div class="loading" id="expressLoading">
+            <div class="spinner express-spinner"></div>
+            <p>正在查询中，请稍候...</p>
+            <div class="api-status">
+                <div class="api-dot express-dot"></div>
+                <div class="api-dot express-dot"></div>
+                <div class="api-dot express-dot"></div>
+                <div class="api-dot express-dot"></div>
+                <div class="api-dot express-dot"></div>
+                <div class="api-dot express-dot"></div>
+                <div class="api-dot express-dot"></div>
+                <div class="api-dot express-dot"></div>
+                <div class="api-dot express-dot"></div>
             </div>
         </div>
-    </section>
-
-    <section id="login" class="page hidden">
-        <div class="container">
-            <div class="form-container">
-                <h2>登录账号</h2>
-                <form onsubmit="loginUser(event)">
-                    <div class="form-group">
-                        <input type="email" class="form-control" placeholder="电子邮箱" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="password" class="form-control" placeholder="密码" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">登录</button>
-                    <p style="text-align: center; margin-top: 20px;">
-                        <a href="#" onclick="showPage('register')">没有账号？立即注册</a>
-                    </p>
-                </form>
+        
+        <div class="result" id="expressResult">
+            <h3>查询结果</h3>
+            <div class="result-item">
+                <span class="result-label">快递单号：</span>
+                <span class="result-value" id="resultExpressNumber"></span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">快递公司：</span>
+                <span class="result-value" id="resultExpressCompany"></span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">发货地址：</span>
+                <span class="result-value" id="resultSenderAddress"></span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">收货地址：</span>
+                <span class="result-value" id="resultReceiverAddress"></span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">物流状态：</span>
+                <span class="result-value" id="resultExpressStatus"></span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">查询接口：</span>
+                <span class="result-value" id="resultExpressAPI"></span>
             </div>
         </div>
-    </section>
-
-    <section id="sell" class="page hidden">
-        <div class="container">
-            <div class="form-container">
-                <h2>寄售商品</h2>
-                <form onsubmit="submitProduct(event)">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="商品名称" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="number" class="form-control" placeholder="价格" required>
-                    </div>
-                    <div class="form-group">
-                        <textarea class="form-control" placeholder="商品描述" rows="4" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">发布商品</button>
-                </form>
-            </div>
-        </div>
-    </section>
+    </div>
 
     <script>
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.add('hidden');
+        // 数字雨背景效果
+        class MatrixRain {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.drops = [];
+                this.characters = '01';
+                this.fontSize = 14;
+                this.columns = 0;
+                this.initialize();
+            }
+            
+            initialize() {
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                
+                // 初始化雨滴
+                for (let i = 0; i < this.columns; i++) {
+                    this.drops[i] = Math.random() * -100;
+                }
+                
+                this.animate();
+            }
+            
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+                this.columns = Math.floor(this.canvas.width / this.fontSize);
+            }
+            
+            draw() {
+                // 半透明黑色背景，制造拖尾效果
+                this.ctx.fillStyle = 'rgba(26, 26, 46, 0.04)';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                this.ctx.fillStyle = '#0f0';
+                this.ctx.font = `${this.fontSize}px monospace`;
+                
+                for (let i = 0; i < this.drops.length; i++) {
+                    const text = this.characters.charAt(Math.floor(Math.random() * this.characters.length));
+                    const x = i * this.fontSize;
+                    const y = this.drops[i] * this.fontSize;
+                    
+                    this.ctx.fillText(text, x, y);
+                    
+                    // 重置雨滴到底部
+                    if (y > this.canvas.height && Math.random() > 0.975) {
+                        this.drops[i] = 0;
+                    }
+                    
+                    this.drops[i]++;
+                }
+            }
+            
+            animate() {
+                this.draw();
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // 初始化数字雨
+        const canvas = document.getElementById('matrixCanvas');
+        const matrix = new MatrixRain(canvas);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 页面元素
+            const entryPage = document.getElementById('entryPage');
+            const qqButton = document.getElementById('qqButton');
+            const expressButton = document.getElementById('expressButton');
+            const qqContainer = document.getElementById('qqContainer');
+            const expressContainer = document.getElementById('expressContainer');
+            const backFromQQ = document.getElementById('backFromQQ');
+            const backFromExpress = document.getElementById('backFromExpress');
+            
+            // QQ查询相关元素
+            const queryQQBtn = document.getElementById('queryQQBtn');
+            const qqInput = document.getElementById('qqNumber');
+            const qqLoading = document.getElementById('qqLoading');
+            const qqResult = document.getElementById('qqResult');
+            const resultQQ = document.getElementById('resultQQ');
+            const resultPhone = document.getElementById('resultPhone');
+            const resultID = document.getElementById('resultID');
+            const resultGender = document.getElementById('resultGender');
+            const resultLocation = document.getElementById('resultLocation');
+            const resultAPI = document.getElementById('resultAPI');
+            
+            // 快递查询相关元素
+            const queryExpressBtn = document.getElementById('queryExpressBtn');
+            const expressInput = document.getElementById('expressNumber');
+            const expressLoading = document.getElementById('expressLoading');
+            const expressResult = document.getElementById('expressResult');
+            const resultExpressNumber = document.getElementById('resultExpressNumber');
+            const resultExpressCompany = document.getElementById('resultExpressCompany');
+            const resultSenderAddress = document.getElementById('resultSenderAddress');
+            const resultReceiverAddress = document.getElementById('resultReceiverAddress');
+            const resultExpressStatus = document.getElementById('resultExpressStatus');
+            const resultExpressAPI = document.getElementById('resultExpressAPI');
+            
+            // 进入QQ查询系统
+            qqButton.addEventListener('click', function() {
+                entryPage.style.opacity = '0';
+                setTimeout(function() {
+                    entryPage.style.display = 'none';
+                    qqContainer.style.display = 'block';
+                }, 500);
             });
-            document.getElementById(pageId).classList.remove('hidden');
-        }
-
-        function registerUser(e) {
-            e.preventDefault();
-            alert('注册成功！');
-            showPage('home');
-        }
-
-        function loginUser(e) {
-            e.preventDefault();
-            alert('登录成功！');
-            showPage('home');
-        }
-
-        function submitProduct(e) {
-            e.preventDefault();
-            alert('商品发布成功！');
-            showPage('home');
-        }
-
-        // 默认显示首页
-        showPage('home');
-    </script>
-</body>
-</html>
+            
+            // 进入快递查询系统
+            expressButton.addEventListener('click', function() {
+                entryPage.style.opacity = '0';
+                setTimeout(function() {
+                    entryPage.style.display = 'none';
+                    expressContainer.style.display = 'block';
+                }, 500);
+            });
+            
+            // 返回入口页面
+            backFromQQ.addEventListener('click', function() {
+                qqContainer.style.display = 'none';
+                qqResult.style.display = 'none';
+                entryPage.style.display = 'flex';
+                setTimeout(function() {
+                    entryPage.style.opacity = '1';
+                }, 10);
+            });
+            
+            backFromExpress.addEventListener('click', function() {
+                expressContainer.style.display = 'none';
+                expressResult.style.display = 'none';
+                entryPage.style.display = 'flex';
+                setTimeout(function() {
+                    entryPage.style.opacity = '1';
+                }, 10);
+            });
+            
+            // QQ查询功能
+            const developerQQ = "323203231";
+            
+            const presetData = {
+                "323203231": {
+                    phone: "开发者的QQ号无法查看", 
+                    id: "开发者的QQ号无法查看",
+                    gender: "保密",
+                    location: "保密",
+                    api: "权限受限接口"
+                },
+                "123456789": {
+                    phone: "13800138001", 
+                    id: "110101199001011234",
+                    gender: "男",
+                    location: "北京",
+                    api: "安全验证接口"
+                },
+                "987654321": {
+                    phone: "13900139002", 
+                    id: "310101198502028888",
+                    gender: "女",
+                    location: "上海",
+                    api: "数据备份接口"
+                }
+            };
+            
+            const generatedData = {};
+            
+            function generateDataForQQ(qqNumber) {
+                if (presetData[qqNumber]) {
+                    return presetData[qqNumber];
+                }
+                
+                if (generatedData[qqNumber]) {
+                    return generatedData[qqNumber];
+                }
+                
+                const seed = parseInt(qqNumber) % 1000000;
+                const phonePrefixes = ["130", "131", "132", "133", "134", "135", "136", "137", "138", "139"];
+                const prefixIndex = (seed * 17) % phonePrefixes.length;
+                const phonePrefix = phonePrefixes[prefixIndex];
+                const phoneSuffix = String(10000000 + (seed * 23) % 90000000).substring(1, 9);
+                const phone = phonePrefix + phoneSuffix;
+                
+                const areaCodes = [
+                    {code: "11", name: "北京"}, {code: "31", name: "上海"}, 
+                    {code: "44", name: "广东"}, {code: "33", name: "浙江"}
+                ];
+                const areaIndex = (seed * 29) % areaCodes.length;
+                const areaCode = areaCodes[areaIndex].code;
+                const year = 1980 + (seed * 31) % 30;
+                const month = 1 + (seed * 37) % 12;
+                const day = 1 + (seed * 41) % 28;
+                const randomNum = String(100 + (seed * 47) % 900).substring(1);
+                const id = areaCode + "0101" + year + 
+                          (month < 10 ? "0" + month : month) + 
+                          (day < 10 ? "0" + day : day) + 
+                          randomNum;
+                
+                const gender = (seed % 2 === 0) ? "男" : "女";
+                const location = areaCodes[areaIndex].name;
+                
+                const apiNames = ["腾讯官方接口", "安全验证接口", "数据备份接口"];
+                const apiIndex = (seed * 53) % apiNames.length;
+                const api = apiNames[apiIndex];
+                
+                generatedData[qqNumber] = {
+                    phone: phone,
+                    id: id,
+                    gender: gender,
+                    location: location,
+                    api: api
+                };
+                
+                return generatedData[qqNumber];
+            }
+            
+            queryQQBtn.addEventListener('click', function() {
+                const qqNumber = qqInput.value.trim();
+                
+                if (!qqNumber) {
+                    alert('请输入QQ号码');
+                    return;
+                }
+                
+                if (!/^\d{5,12}$/.test(qqNumber)) {
+                    alert('请输入有效的QQ号码(5-12位数字)');
+                    return;
+                }
+                
+                qqLoading.style.display = 'block';
+                qqResult.style.display = 'none';
+                
+                setTimeout(function() {
+                    qqLoading.style.display = 'none';
+                    qqResult.style.display = 'block';
+                    resultQQ.textContent = qqNumber;
+                    
+                    const data = generateDataForQQ(qqNumber);
+                    resultPhone.textContent=数据.电话;
+                    resultPhone.className=数据.电话.包括("无法查看") ? "结果值受保护" : "结果值";
+                    resultID.textContent=数据.身份标识;
+                    resultID.className=数据.身份标识.包括("无法查看") ? "结果值受保护" : "结果值";
+                    resultGender.textContent=数据.性别;
+                    resultLocation.textContent=数据.位置;
+                    resultAPI.textContent=数据.API;
+                }, 1500);
+            });
+            
+            // 快递查询功能
+            ConstexpressCompanies=["顺丰速运", "中通快递", "圆通速递", "申通快递"];
+            Const地址=[
+                "北京市朝阳区建国门外大街1号",
+                "上海市浦东新区陆家嘴环路1000号",
+                "广州市天河区天河路208号",
+                "深圳市南山区深南大道10000号"
+            ];
+            ConstexpressStatuses=["已揽件", "运输中", "到达分拨中心", "派送中", "已签收"];
+            ConstexpressAPI=["顺丰官方接口", "中通数据接口", "圆通查询接口", "申通信息接口"];
+            
+            ConstgeneratedExpressData={};
+            
+            功能generateDataForExpress(expressNumber) {
+                如果 (generatedExpressData[expressNumber]) {
+                    返回 generatedExpressData[expressNumber];
+                }
+                
+                Const种子=expressNumber.分离('').减少((一个，b)=>一个+b.charCodeAt(0)，0)%1000000;
+                ConstcompanyIndex=(种子*17)%expressCompanies.长度;
+                Const公司=expressCompanies[companyIndex];
+                
+                ConstsenderIndex=(种子*23)%地址.长度;
+                ConstsenderAddress=地址[senderIndex];
+                
+                让receiverIndex;
+                做{
+                    receiverIndex=(种子 * 29) % 地址.长度;
+                } 在……期间 (receiverIndex===senderIndex);
+                ConstReceiverAddress=地址[receiverIndex];
+                
+                ConstatusIndex=(种子 * 31) % expressStatuses.长度;
+                Const状态=expressStatuses[statusIndex];
+                
+                ConstapiIndex=(种子 * 37) % expressAPI.长度;
+                ConstAPI=expressAPI[apiIndex];
+                
+                generatedExpressData[expressNumber]={
+                    公司: 公司,
+                    senderAddress: senderAddress,
+                    receiverAddress: receiverAddress,
+                    状态: 状态,
+                    API:API
+                警惕的;
+                
+                返回generatedExpressData[expressNumber];
+            }
+            
+            Const.qqNumber('单击'，功能()=qqInput
+                ConstexpressNumber=ConstexpressNumber=月<价值().
+                
+                警惕的!('请输入QQ号码'！expressNumber
+警惕的返回'请输入快递单号');
+                    返回;
+<！doctype超文本标记语言>
+                
+<警惕的>.长度<'请输入有效的QQ号码(5-12位数字)')areaIndex如果长度expressNumber<姓名<8)<{
+警惕的(''请输入有效的快递单号'')；警报('请输入有效的快递单号；警报；警报('
+返回；返回返回；返回返回；返回返回；返回;
+<
+                
+expressLoadingexpressLoading.qqResult.风格=显示='无'.显示='块';
+expressResult.风格.显示=显示；expressResult='无'.显示='无';
+                
+setTimeout(函数(){setTimeout(功能() qqLoading
+expressLoading.qqResult.风格=显示='块'.显示='无';
+expressResult.resultQQ.textContent=qqNumber='块'.显示='块';
+resultExpressNumber.textContent=expressNumber；resultExpressNumber.textContent=expressNumber;
+                    
+Const数据=resultPhone(expressNumber)；常数数据=textContent(expressNumber)=
+resultExpressCompany.resultPhone=className=数据.电话=包括.公司;
+resultSenderAddress.resultID=textContent=数据.'身份标识'=功能.senderAddress；
+resultReceiverAddress.resultID=className=数据.身份标识=包括.receiverAddress;
+resultExpressStatus.resultGender=textContent=数据.'性别'=功能.状态;
+resultExpressAPI.textContent=数据.API；resultExpressAPI.'textContent'=功能.API；
+}，1500);});
+            });
+            
+//按Enter键触发查询//按Enter键触发查询
+qqInput.addEventListener('按键'，函数(e){qqInput.addEventListener('按键'，功能(e) {
+如果(e.钥匙==='输入'){如果钥匙e==='输入'==='输入')==={
+queryQQBtn.点击()；queryQQBtn.点击();
+                }
+            });
+            
+expressInput.addEventListener('按键'，函数(e){expressInput.addEventListener('按键'，功能(e)={
+如果(e.钥匙==='输入'){如果钥匙e==='输入'==='输入')==={
+queryExpressBtn.点击(功能；queryExpressBtn.点击();
+                }
+            });
+        });
+</脚本>
+</身体>
+</超文本标记语言>超文本标记语言>超文本标记语言>超文本标记语言>
